@@ -1,217 +1,62 @@
 <!doctype html>
 <html lang="ja">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="robots" content="noindex,nofollow,noarchive">
-  <meta name="referrer" content="no-referrer">
-  <title>給与設定 UI モック 3案 | 三川屋農園</title>
-  <style>
-    :root{
-      --bg:#f4f6f8;--surface:#fff;--surface-2:#f8fafc;--text:#1f2937;--muted:#667085;
-      --line:#dbe1e8;--accent:#2563eb;--accent-bg:#eff6ff;--good:#16794a;--good-bg:#edf8f2;
-      --warn:#95570a;--warn-bg:#fff7e8;--nav:#172234;--shadow:0 8px 24px rgba(16,24,40,.08);
-      color-scheme:light;
-    }
-    *{box-sizing:border-box;min-width:0}
-    html{-webkit-text-size-adjust:100%}
-    body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Hiragino Sans","Yu Gothic UI","Noto Sans JP",sans-serif;overflow-x:hidden}
-    button,input,select{font:inherit} button{cursor:pointer} button,input,select{min-height:44px}
-    input,select{font-size:16px}
-    .app{max-width:1180px;margin:0 auto;padding:14px}
-    .header{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;margin-bottom:12px}
-    .header h1{font-size:20px;margin:0 0 4px}.header p{font-size:12px;color:var(--muted);margin:0}
-    .mock-badge{display:inline-flex;padding:4px 8px;border-radius:999px;background:#eef2f6;color:#475467;font-size:11px;font-weight:700;white-space:nowrap}
-    .pattern-tabs,.hscroll{display:flex;gap:7px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding-bottom:3px}
-    .pattern-tabs::-webkit-scrollbar,.hscroll::-webkit-scrollbar{display:none}
-    .pattern-tab,.subtab{flex:0 0 auto;border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:9px 13px;color:#344054;font-weight:700}
-    .pattern-tab[aria-selected="true"]{background:#111827;color:white;border-color:#111827}
-    .subtab[aria-selected="true"]{background:var(--accent-bg);color:#1849a9;border-color:#b2ccff}
-    .panel{margin-top:12px}.hidden{display:none!important}
-    .panel-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:12px}
-    .panel-head h2{font-size:22px;margin:0 0 4px}.panel-head p{font-size:13px;color:var(--muted);margin:0}
-    .btn{border:1px solid var(--line);background:var(--surface);border-radius:9px;padding:8px 12px;color:var(--text);font-weight:650}
-    .btn.primary{background:var(--accent);border-color:var(--accent);color:white}.btn.full{width:100%}
-    .grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-    .card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;box-shadow:0 1px 2px rgba(16,24,40,.02)}
-    .card h3{font-size:15px;margin:0 0 6px}.card p{font-size:12px;color:var(--muted);line-height:1.6;margin:0}
-    .row{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;border-top:1px solid #edf0f3;padding:12px 0;font-size:13px}
-    .row:first-of-type{border-top:0}.row .label{color:var(--muted)}.row strong{text-align:right;overflow-wrap:anywhere}
-    .notice{background:var(--warn-bg);border:1px solid #efd7a6;color:#744607;border-radius:10px;padding:12px;font-size:12px;line-height:1.6}
-    .switch{border:1px solid #9fb2c8;background:var(--good-bg);color:var(--good);border-radius:999px;padding:8px 15px;font-weight:800;min-width:62px}
-    .list{display:grid;gap:8px}.list-item{width:100%;border:1px solid var(--line);background:var(--surface);border-radius:11px;padding:12px;text-align:left}
-    .list-item .topline{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.list-item small{display:block;color:var(--muted);margin-top:4px;line-height:1.45}
-    .status{display:inline-flex;padding:3px 8px;border-radius:999px;background:var(--good-bg);color:var(--good);font-size:11px;font-weight:700;white-space:nowrap}
-    .status.warn{background:var(--warn-bg);color:var(--warn)}
-    .desktop-table{overflow-x:auto}.table{width:100%;border-collapse:collapse;font-size:13px}.table th,.table td{padding:10px;border-top:1px solid #edf0f3;text-align:left;vertical-align:top}.table th{border-top:0;color:var(--muted);font-size:11px}.mobile-cards{display:none}
-    .person-layout{display:grid;grid-template-columns:230px minmax(0,1fr);gap:12px}.people{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:8px;height:fit-content}.person{width:100%;border:0;background:transparent;border-radius:10px;padding:11px;text-align:left;margin-bottom:4px}.person[aria-selected="true"]{background:var(--accent-bg)}.person small{display:block;color:var(--muted);margin-top:3px}
-    .metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:12px}.metric{background:var(--surface-2);border-radius:10px;padding:11px}.metric span{display:block;color:var(--muted);font-size:10px}.metric strong{display:block;margin-top:3px;overflow-wrap:anywhere}
-    .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}.chip{background:#f2f4f7;border-radius:999px;padding:6px 9px;font-size:12px}
-    .steps{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin-bottom:12px}.step{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px;min-height:104px}.step.current{border:2px solid var(--accent);background:var(--accent-bg)}.step .n{font-size:11px;color:var(--muted)}.step strong{display:block;margin-top:7px;font-size:13px}.step small{display:block;color:var(--muted);margin-top:4px;line-height:1.4}
-    .task{display:grid;grid-template-columns:24px minmax(0,1fr) auto;gap:8px;align-items:center;border-top:1px solid #edf0f3;padding:11px 0}.task:first-of-type{border-top:0}.task b{display:block;font-size:13px}.task small{display:block;color:var(--muted);margin-top:2px}.task .btn{white-space:nowrap}
-    dialog{border:0;padding:0;background:transparent;width:min(94vw,560px);max-width:560px;color:var(--text)}dialog::backdrop{background:rgba(15,23,42,.58)}
-    .modal{background:var(--surface);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);max-height:calc(100vh - 28px);overflow:auto}
-    .modal-head{position:sticky;top:0;background:var(--surface);z-index:2;display:flex;justify-content:space-between;gap:12px;align-items:flex-start;padding:16px;border-bottom:1px solid var(--line)}.modal-head h3{margin:2px 0 0;font-size:18px}.close{width:44px;min-width:44px;border:1px solid var(--line);background:var(--surface-2);border-radius:9px;font-size:20px}
-    .modal-body{padding:16px}.field{display:block;margin-bottom:12px;font-size:13px;font-weight:650}.field input,.field select{display:block;width:100%;margin-top:5px;border:1px solid #cfd6df;border-radius:9px;background:white;padding:9px 10px}.checks{display:grid;gap:3px;margin:7px 0 12px}.check{display:flex;align-items:center;gap:8px;min-height:44px;font-size:13px}.check input{min-height:auto;width:18px;height:18px}.modal-actions{position:sticky;bottom:0;background:var(--surface);display:flex;gap:8px;justify-content:flex-end;padding:12px 16px;border-top:1px solid var(--line)}
-    .toast{position:fixed;z-index:50;left:50%;bottom:16px;transform:translate(-50%,16px);opacity:0;pointer-events:none;background:#111827;color:white;border-radius:10px;padding:10px 14px;font-size:12px;transition:.2s}.toast.show{opacity:1;transform:translate(-50%,0)}
-    .privacy{margin-top:14px;font-size:11px;color:var(--muted);line-height:1.55}
-    @media(max-width:760px){
-      .app{padding:10px}.header{display:block}.mock-badge{margin-top:8px}.panel-head{display:block}.panel-head .btn{width:100%;margin-top:10px}.grid2{grid-template-columns:1fr}.person-layout{grid-template-columns:1fr}.people{display:flex;gap:7px;overflow-x:auto;scrollbar-width:none}.people::-webkit-scrollbar{display:none}.person{min-width:150px;margin:0;flex:0 0 auto}.steps{display:flex;overflow-x:auto;scrollbar-width:none}.steps::-webkit-scrollbar{display:none}.step{flex:0 0 146px}.task{grid-template-columns:24px minmax(0,1fr)}.task .btn{grid-column:2;justify-self:start}.desktop-table{display:none}.mobile-cards{display:grid;gap:8px}.modal-actions .btn{flex:1}.toast{left:10px;right:10px;transform:translateY(16px);text-align:center}.toast.show{transform:translateY(0)}
-    }
-    @media(max-width:420px){.metrics{grid-template-columns:1fr}.row{display:grid;gap:5px}.row strong{text-align:left}.pattern-tab{font-size:12px;padding:8px 10px}}
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta name="referrer" content="no-referrer">
+<title>給与設定 UI モック 3案 | 三川屋農園</title>
+<style>
+:root{--bg:#f4f6f8;--surface:#fff;--surface2:#f8fafc;--text:#1f2937;--muted:#667085;--line:#dbe1e8;--accent:#2563eb;--accentbg:#eff6ff;--good:#16794a;--goodbg:#edf8f2;--warn:#95570a;--warnbg:#fff7e8;--shadow:0 8px 24px rgba(16,24,40,.08)}
+*{box-sizing:border-box;min-width:0}html{-webkit-text-size-adjust:100%}body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Hiragino Sans","Yu Gothic UI","Noto Sans JP",sans-serif;overflow-x:hidden}button,input,select{font:inherit}button{cursor:pointer}button,input,select{min-height:44px}input,select{font-size:16px}.app{max-width:1180px;margin:auto;padding:14px}.header{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;margin-bottom:12px}.header h1{font-size:20px;margin:0 0 4px}.header p,.muted{font-size:12px;color:var(--muted);margin:0}.badge{display:inline-flex;padding:4px 8px;border-radius:999px;background:#eef2f6;color:#475467;font-size:11px;font-weight:700;white-space:nowrap}.tabs,.hscroll,.people{display:flex;gap:7px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}.tabs::-webkit-scrollbar,.hscroll::-webkit-scrollbar,.people::-webkit-scrollbar{display:none}.tab,.subtab{flex:0 0 auto;border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:9px 13px;font-weight:700;color:#344054}.tab[aria-selected="true"]{background:#111827;color:#fff;border-color:#111827}.subtab[aria-selected="true"],.person[aria-selected="true"]{background:var(--accentbg);color:#1849a9}.panel{margin-top:12px}.hidden{display:none!important}.panel-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:12px}.panel-head h2{font-size:22px;margin:0 0 4px}.panel-head p{font-size:13px;color:var(--muted);margin:0}.btn{border:1px solid var(--line);background:var(--surface);border-radius:9px;padding:8px 12px;color:var(--text);font-weight:650}.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;box-shadow:0 1px 2px rgba(16,24,40,.02)}.card h3{font-size:15px;margin:0 0 6px}.card p{font-size:12px;color:var(--muted);line-height:1.6;margin:0}.row{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;border-top:1px solid #edf0f3;padding:12px 0;font-size:13px}.row:first-of-type{border-top:0}.label{color:var(--muted)}.row strong{text-align:right;overflow-wrap:anywhere}.notice{background:var(--warnbg);border:1px solid #efd7a6;color:#744607;border-radius:10px;padding:12px;font-size:12px;line-height:1.6}.switch{border:1px solid #9fb2c8;background:var(--goodbg);color:var(--good);border-radius:999px;padding:8px 15px;font-weight:800;min-width:62px}.status{display:inline-flex;padding:3px 8px;border-radius:999px;background:var(--goodbg);color:var(--good);font-size:11px;font-weight:700;white-space:nowrap}.status.warn{background:var(--warnbg);color:var(--warn)}.list{display:grid;gap:8px}.list-item{width:100%;border:1px solid var(--line);background:var(--surface);border-radius:11px;padding:12px;text-align:left}.topline{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.list-item small,.person small{display:block;color:var(--muted);margin-top:4px;line-height:1.45}.desktop-table{overflow-x:auto}.table{width:100%;border-collapse:collapse;font-size:13px}.table th,.table td{padding:10px;border-top:1px solid #edf0f3;text-align:left;vertical-align:top}.table th{border-top:0;color:var(--muted);font-size:11px}.mobile-cards{display:none}.person-layout{display:grid;grid-template-columns:230px minmax(0,1fr);gap:12px}.people{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:8px;height:fit-content;display:block}.person{width:100%;border:0;background:transparent;border-radius:10px;padding:11px;text-align:left;margin-bottom:4px}.metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:12px}.metric{background:var(--surface2);border-radius:10px;padding:11px}.metric span{display:block;color:var(--muted);font-size:10px}.metric strong{display:block;margin-top:3px;overflow-wrap:anywhere}.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}.chip{background:#f2f4f7;border-radius:999px;padding:6px 9px;font-size:12px}.steps{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin-bottom:12px}.step{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px;min-height:104px}.step.current{border:2px solid var(--accent);background:var(--accentbg)}.step .n{font-size:11px;color:var(--muted)}.step strong{display:block;margin-top:7px;font-size:13px}.step small{display:block;color:var(--muted);margin-top:4px;line-height:1.4}.task{display:grid;grid-template-columns:24px minmax(0,1fr) auto;gap:8px;align-items:center;border-top:1px solid #edf0f3;padding:11px 0}.task:first-of-type{border-top:0}.task b{display:block;font-size:13px}.task small{display:block;color:var(--muted);margin-top:2px}.task .btn{white-space:nowrap}dialog{border:0;padding:0;background:transparent;width:min(94vw,560px);max-width:560px;color:var(--text)}dialog::backdrop{background:rgba(15,23,42,.58)}.modal{background:var(--surface);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);max-height:calc(100vh - 28px);overflow:auto}.modal-head{position:sticky;top:0;background:var(--surface);z-index:2;display:flex;justify-content:space-between;gap:12px;align-items:flex-start;padding:16px;border-bottom:1px solid var(--line)}.modal-head h3{margin:2px 0 0;font-size:18px}.close{width:44px;min-width:44px;border:1px solid var(--line);background:var(--surface2);border-radius:9px;font-size:20px}.modal-body{padding:16px}.field{display:block;margin-bottom:12px;font-size:13px;font-weight:650}.field input,.field select{display:block;width:100%;margin-top:5px;border:1px solid #cfd6df;border-radius:9px;background:#fff;padding:9px 10px}.checks{display:grid;gap:3px;margin:7px 0 12px}.check{display:flex;align-items:center;gap:8px;min-height:44px;font-size:13px}.check input{min-height:auto;width:18px;height:18px}.modal-actions{position:sticky;bottom:0;background:var(--surface);display:flex;gap:8px;justify-content:flex-end;padding:12px 16px;border-top:1px solid var(--line)}.toast{position:fixed;z-index:50;left:50%;bottom:16px;transform:translate(-50%,16px);opacity:0;pointer-events:none;background:#111827;color:#fff;border-radius:10px;padding:10px 14px;font-size:12px;transition:.2s}.toast.show{opacity:1;transform:translate(-50%,0)}.privacy{margin-top:14px;font-size:11px;color:var(--muted);line-height:1.55}
+@media(max-width:760px){.app{padding:10px}.header{display:block}.badge{margin-top:8px}.panel-head{display:block}.panel-head .btn{width:100%;margin-top:10px}.grid2{grid-template-columns:1fr}.person-layout{grid-template-columns:1fr}.people{display:flex;gap:7px;overflow-x:auto}.person{min-width:150px;margin:0;flex:0 0 auto}.steps{display:flex;overflow-x:auto;scrollbar-width:none}.step{flex:0 0 146px}.task{grid-template-columns:24px minmax(0,1fr)}.task .btn{grid-column:2;justify-self:start}.desktop-table{display:none}.mobile-cards{display:grid;gap:8px}.modal-actions .btn{flex:1}.toast{left:10px;right:10px;transform:translateY(16px);text-align:center}.toast.show{transform:translateY(0)}}
+@media(max-width:420px){.metrics{grid-template-columns:1fr}.row{display:grid;gap:5px}.row strong{text-align:left}.tab{font-size:12px;padding:8px 10px}}
+</style>
 </head>
 <body>
 <main class="app">
-  <header class="header">
-    <div><h1>給与設定 UI モック — 3案比較</h1><p>Phase 2A の画面構成を比較するためのダミーモックです。</p></div>
-    <span class="mock-badge">公開用ダミーデータ</span>
-  </header>
+<header class="header"><div><h1>給与設定 UI モック — 3案比較</h1><p>Phase 2A の画面構成を比較するためのダミーモックです。</p></div><span class="badge">公開用ダミーデータ</span></header>
+<nav class="tabs" aria-label="UIパターン" role="tablist"><button class="tab" data-pattern="a" aria-selected="true">A｜管理コンソール</button><button class="tab" data-pattern="b" aria-selected="false">B｜従業員カルテ</button><button class="tab" data-pattern="c" aria-selected="false">C｜給与フロー</button></nav>
 
-  <nav class="pattern-tabs" aria-label="UIパターン" role="tablist">
-    <button class="pattern-tab" data-pattern="a" role="tab" aria-selected="true">A｜管理コンソール</button>
-    <button class="pattern-tab" data-pattern="b" role="tab" aria-selected="false">B｜従業員カルテ</button>
-    <button class="pattern-tab" data-pattern="c" role="tab" aria-selected="false">C｜給与フロー</button>
-  </nav>
+<section class="panel" id="panel-a">
+<div class="panel-head"><div><h2>設定項目から管理</h2><p>既存の管理画面へ「給与設定」を追加する、オーソドックスな構成。</p></div><button class="btn primary" data-toast="変更を保存しました（モック）">変更を保存</button></div>
+<div class="hscroll card" style="padding:7px;margin-bottom:12px;box-shadow:none"><button class="subtab" data-pane="company" aria-selected="true">事業主設定</button><button class="subtab" data-pane="allowance" aria-selected="false">手当マスター</button><button class="subtab" data-pane="employee" aria-selected="false">従業員設定</button><button class="subtab" data-pane="bank" aria-selected="false">振込口座</button></div>
+<div class="a-pane grid2" id="a-company"><article class="card"><h3>事業主</h3><p>このスプレッドシートに紐づく事業主。</p><div class="row"><span class="label">事業主コード</span><strong>MK</strong></div><div class="row"><span class="label">正式名称</span><strong>三川屋農園株式会社</strong></div><div class="row"><span class="label">締め / 支払</span><strong>月末 / 翌月15日</strong></div></article><article class="card"><h3>源泉所得税</h3><p>納期の特例は事業主ごとに設定。</p><div class="row"><div><strong>納期の特例</strong><div class="label" id="a-tax-note">現在 ON</div></div><button id="a-tax" class="switch" aria-pressed="true">ON</button></div><div class="notice">税額そのものではなく、納付期間の集計に使用する設定です。</div></article></div>
+<div class="a-pane hidden" id="a-allowance"><article class="card"><div class="panel-head" style="margin:0"><div><h3>手当マスター</h3><p>使用済みの手当は削除せず無効化。</p></div><button class="btn primary edit" data-kind="allowance" data-title="手当を追加">＋ 手当を追加</button></div><div class="desktop-table"><table class="table"><thead><tr><th>ID</th><th>名称</th><th>種類</th><th>状態</th><th></th></tr></thead><tbody><tr><td>A001</td><td>通勤手当</td><td>距離連動</td><td><span class="status">有効</span></td><td><button class="btn edit" data-kind="allowance" data-title="通勤手当を編集">編集</button></td></tr><tr><td>A002</td><td>役職手当</td><td>固定額</td><td><span class="status">有効</span></td><td><button class="btn edit" data-kind="allowance" data-title="役職手当を編集">編集</button></td></tr><tr><td>A003</td><td>繁忙期手当</td><td>固定額</td><td><span class="status warn">無効</span></td><td><button class="btn edit" data-kind="allowance" data-title="繁忙期手当を編集">編集</button></td></tr></tbody></table></div><div class="mobile-cards"><button class="list-item edit" data-kind="allowance" data-title="通勤手当を編集"><span class="topline"><strong>通勤手当</strong><span class="status">有効</span></span><small>A001 / 距離連動</small></button><button class="list-item edit" data-kind="allowance" data-title="役職手当を編集"><span class="topline"><strong>役職手当</strong><span class="status">有効</span></span><small>A002 / 固定額</small></button></div></article></div>
+<div class="a-pane hidden" id="a-employee"><article class="card"><h3>従業員ごとの給与設定</h3><p>人数が増えた場合の一覧性を確認するため、6名のダミー従業員を表示しています。</p><div class="list" id="a-employee-list" style="margin-top:12px"></div></article></div>
+<div class="a-pane hidden" id="a-bank"><article class="card"><h3>給与振込口座</h3><p>公開用モックのため実際の口座番号は扱いません。</p><div class="list" id="a-bank-list" style="margin-top:12px"></div></article></div>
+</section>
 
-  <section class="panel" id="panel-a" role="tabpanel">
-    <div class="panel-head"><div><h2>設定項目から管理</h2><p>既存の管理画面へ「給与設定」を追加する、オーソドックスな構成。</p></div><button class="btn primary" data-toast="変更を保存しました（モック）">変更を保存</button></div>
-    <div class="hscroll card" style="padding:7px;margin-bottom:12px;box-shadow:none">
-      <button class="subtab" data-a-pane="company" aria-selected="true">事業主設定</button>
-      <button class="subtab" data-a-pane="allowance" aria-selected="false">手当マスター</button>
-      <button class="subtab" data-a-pane="employee" aria-selected="false">従業員設定</button>
-      <button class="subtab" data-a-pane="bank" aria-selected="false">振込口座</button>
-    </div>
+<section class="panel hidden" id="panel-b">
+<div class="panel-head"><div><h2>従業員カルテ</h2><p>人を選び、通勤・手当・振込口座をまとめて確認する構成。6名で操作感を確認できます。</p></div></div>
+<div class="card" style="margin-bottom:12px"><div class="row" style="padding:0"><div><strong>三川屋農園株式会社</strong><div class="label">源泉所得税の納期の特例</div></div><button id="b-tax" class="switch" aria-pressed="true">ON</button></div></div>
+<div class="person-layout"><aside class="people" id="people" aria-label="従業員選択"></aside><div class="list"><article class="card"><div class="topline"><div><h3 id="b-name" style="font-size:19px;margin-bottom:2px">従業員A</h3><p id="b-sub">E001 / 在籍中</p></div><span id="b-state" class="status">設定完了</span></div><div class="metrics"><div class="metric"><span>時給</span><strong>サンプル値</strong></div><div class="metric"><span>通勤距離</span><strong id="b-distance">6.0 km</strong></div><div class="metric"><span>振込口座</span><strong id="b-bank-state">設定済み</strong></div></div></article><div class="grid2"><article class="card"><div class="topline"><h3>通勤・手当</h3><button class="btn edit" data-kind="employee" data-title="通勤・手当を編集">編集</button></div><div class="chips" id="b-chips"><span class="chip">通勤手当</span></div></article><article class="card"><div class="topline"><h3>振込口座</h3><button class="btn edit" data-kind="bank" data-title="振込口座を編集">編集</button></div><p id="b-bank">サンプル信用金庫 / 中央支店 / 口座番号は非表示</p></article></div><article class="card"><h3>設定履歴イメージ</h3><div id="b-history" class="list" style="margin-top:8px"></div></article><article class="card"><h3>マイナンバー</h3><p>このカルテには表示しません。専用権限の別領域で管理する想定です。</p></article></div></div>
+</section>
 
-    <div class="a-pane grid2" id="a-company">
-      <article class="card"><h3>事業主</h3><p>このスプレッドシートに紐づく事業主。</p><div class="row"><span class="label">事業主コード</span><strong>MK</strong></div><div class="row"><span class="label">正式名称</span><strong>三川屋農園株式会社</strong></div><div class="row"><span class="label">締め / 支払</span><strong>月末 / 翌月15日</strong></div></article>
-      <article class="card"><h3>源泉所得税</h3><p>納期の特例は事業主ごとに設定。</p><div class="row"><div><strong>納期の特例</strong><div class="label" id="a-tax-note">現在 ON</div></div><button id="a-tax" class="switch" aria-pressed="true">ON</button></div><div class="notice">税額そのものではなく、納付期間の集計に使用する設定です。</div></article>
-    </div>
-
-    <div class="a-pane hidden" id="a-allowance"><article class="card"><div class="panel-head" style="margin:0"><div><h3>手当マスター</h3><p>使用済みの手当は削除せず無効化。</p></div><button class="btn primary edit" data-kind="allowance" data-title="手当を追加">＋ 手当を追加</button></div><div class="desktop-table"><table class="table"><thead><tr><th>ID</th><th>名称</th><th>種類</th><th>状態</th><th></th></tr></thead><tbody><tr><td>A001</td><td>通勤手当</td><td>距離連動</td><td><span class="status">有効</span></td><td><button class="btn edit" data-kind="allowance" data-title="通勤手当を編集">編集</button></td></tr><tr><td>A002</td><td>役職手当</td><td>固定額</td><td><span class="status">有効</span></td><td><button class="btn edit" data-kind="allowance" data-title="役職手当を編集">編集</button></td></tr></tbody></table></div><div class="mobile-cards"><button class="list-item edit" data-kind="allowance" data-title="通勤手当を編集"><span class="topline"><strong>通勤手当</strong><span class="status">有効</span></span><small>A001 / 距離連動</small></button><button class="list-item edit" data-kind="allowance" data-title="役職手当を編集"><span class="topline"><strong>役職手当</strong><span class="status">有効</span></span><small>A002 / 固定額</small></button></div></article></div>
-
-    <div class="a-pane hidden" id="a-employee"><article class="card"><h3>従業員ごとの給与設定</h3><p>表示内容はすべて架空のサンプルです。</p><div class="list" style="margin-top:12px"><button class="list-item edit" data-kind="employee" data-title="従業員Aの給与設定"><span class="topline"><strong>従業員A</strong><span class="status">設定済み</span></span><small>通勤距離 6.0 km / 通勤手当</small></button><button class="list-item edit" data-kind="employee" data-title="従業員Bの給与設定"><span class="topline"><strong>従業員B</strong><span class="status warn">1件要確認</span></span><small>通勤距離 12.0 km / 通勤手当・役職手当</small></button></div></article></div>
-
-    <div class="a-pane hidden" id="a-bank"><article class="card"><h3>給与振込口座</h3><p>実際の口座番号・名義は公開用モックに含めません。</p><div class="list" style="margin-top:12px"><button class="list-item edit" data-kind="bank" data-title="従業員Aの振込口座"><span class="topline"><strong>従業員A</strong><span class="status">設定済み</span></span><small>金融機関：サンプル信用金庫 / 支店：サンプル支店 / 口座番号：非表示</small></button><button class="list-item edit" data-kind="bank" data-title="従業員Bの振込口座"><span class="topline"><strong>従業員B</strong><span class="status warn">要確認</span></span><small>金融機関：サンプル信用金庫 / 支店：未設定 / 口座番号：非表示</small></button></div></article></div>
-  </section>
-
-  <section class="panel hidden" id="panel-b" role="tabpanel">
-    <div class="panel-head"><div><h2>従業員カルテ</h2><p>「誰の設定をするか」から始める、小規模チーム向けの構成。</p></div></div>
-    <div class="card" style="margin-bottom:12px"><div class="row" style="padding:0"><div><strong>三川屋農園株式会社</strong><div class="label">源泉所得税の納期の特例</div></div><button id="b-tax" class="switch" aria-pressed="true">ON</button></div></div>
-    <div class="person-layout">
-      <aside class="people" aria-label="従業員選択"><button class="person" data-person="a" aria-selected="true"><strong>従業員A</strong><small>E001 / 設定完了</small></button><button class="person" data-person="b" aria-selected="false"><strong>従業員B</strong><small>E002 / 1件要確認</small></button></aside>
-      <div class="list">
-        <article class="card"><div class="topline" style="display:flex;justify-content:space-between;gap:12px"><div><h3 id="b-name" style="font-size:19px;margin-bottom:2px">従業員A</h3><p id="b-sub">E001 / 在籍中</p></div><span id="b-state" class="status">設定完了</span></div><div class="metrics"><div class="metric"><span>時給</span><strong>サンプル値</strong></div><div class="metric"><span>通勤距離</span><strong id="b-distance">6.0 km</strong></div><div class="metric"><span>振込口座</span><strong id="b-bank-state">設定済み</strong></div></div></article>
-        <div class="grid2"><article class="card"><div class="topline" style="display:flex;justify-content:space-between;gap:10px"><h3>通勤・手当</h3><button class="btn edit" data-kind="employee" data-title="通勤・手当を編集">編集</button></div><div class="chips" id="b-chips"><span class="chip">通勤手当</span></div></article><article class="card"><div class="topline" style="display:flex;justify-content:space-between;gap:10px"><h3>振込口座</h3><button class="btn edit" data-kind="bank" data-title="振込口座を編集">編集</button></div><p id="b-bank">サンプル信用金庫 / サンプル支店 / 口座番号は非表示</p></article></div>
-        <article class="card"><h3>マイナンバー</h3><p>このカルテには表示しません。専用権限の別領域で管理する想定です。</p></article>
-      </div>
-    </div>
-  </section>
-
-  <section class="panel hidden" id="panel-c" role="tabpanel">
-    <div class="panel-head"><div><h2>給与業務フロー</h2><p>設定画面ではなく「毎月の給与を完成させる作業」に沿って案内する構成。</p></div></div>
-    <div class="steps"><div class="step"><span class="n">✓ STEP 1</span><strong>勤怠</strong><small>確認済み</small></div><div class="step current"><span class="n">STEP 2</span><strong>給与設定</strong><small>現在ここ</small></div><div class="step"><span class="n">STEP 3</span><strong>給与計算</strong><small>未実行</small></div><div class="step"><span class="n">STEP 4</span><strong>確定</strong><small>未実行</small></div><div class="step"><span class="n">STEP 5</span><strong>支払・納付</strong><small>未実行</small></div></div>
-    <div class="grid2"><article class="card"><h3>今月やること</h3><div class="task"><span>✓</span><div><b>事業主の税設定</b><small>納期の特例：ON</small></div><button class="btn edit" data-kind="tax" data-title="源泉所得税設定">確認</button></div><div class="task"><span>✓</span><div><b>手当マスター</b><small>2種類が利用可能</small></div><button class="btn edit" data-kind="allowance" data-title="手当マスター">確認</button></div><div class="task"><span>!</span><div><b>従業員Bの振込口座</b><small>支店情報が未設定</small></div><button class="btn primary edit" data-kind="bank" data-title="従業員Bの振込口座">直す</button></div></article><div class="list"><div class="notice"><strong>給与計算前に1件要確認</strong><br>従業員Bの振込口座で支店情報が未設定です。</div><article class="card"><h3>よく使う設定</h3><div class="grid2" style="margin-top:10px"><button class="list-item edit" data-kind="tax" data-title="事業主設定"><strong>事業主設定</strong><small>納期特例など</small></button><button class="list-item edit" data-kind="allowance" data-title="手当マスター"><strong>手当</strong><small>追加・無効化</small></button><button class="list-item edit" data-kind="employee" data-title="従業員設定"><strong>従業員</strong><small>通勤・手当</small></button><button class="list-item edit" data-kind="bank" data-title="振込口座"><strong>振込口座</strong><small>銀行情報</small></button></div></article></div></div>
-  </section>
-
-  <p class="privacy">このページはUI検討用の静的モックです。実在する従業員の氏名、給与額、口座番号、マイナンバー等は含みません。入力内容は保存・送信されません。</p>
+<section class="panel hidden" id="panel-c">
+<div class="panel-head"><div><h2>給与業務フロー</h2><p>毎月の給与を完成させる作業順に案内する構成。</p></div></div>
+<div class="steps"><div class="step"><span class="n">✓ STEP 1</span><strong>勤怠</strong><small>確認済み</small></div><div class="step current"><span class="n">STEP 2</span><strong>給与設定</strong><small>現在ここ</small></div><div class="step"><span class="n">STEP 3</span><strong>給与計算</strong><small>未実行</small></div><div class="step"><span class="n">STEP 4</span><strong>確定</strong><small>未実行</small></div><div class="step"><span class="n">STEP 5</span><strong>支払・納付</strong><small>未実行</small></div></div>
+<div class="grid2"><article class="card"><h3>今月やること</h3><div class="task"><span>✓</span><div><b>事業主の税設定</b><small>納期の特例：ON</small></div><button class="btn edit" data-kind="tax" data-title="源泉所得税設定">確認</button></div><div class="task"><span>✓</span><div><b>手当マスター</b><small>3種類を登録済み</small></div><button class="btn edit" data-kind="allowance" data-title="手当マスター">確認</button></div><div class="task"><span>!</span><div><b>従業員Bの振込口座</b><small>支店情報が未設定</small></div><button class="btn primary edit" data-kind="bank" data-title="従業員Bの振込口座">直す</button></div><div class="task"><span>!</span><div><b>従業員Eの通勤設定</b><small>通勤距離が未設定</small></div><button class="btn primary edit" data-kind="employee" data-title="従業員Eの給与設定">直す</button></div></article><div class="list"><div class="notice"><strong>給与計算前に2件要確認</strong><br>従業員B：振込口座の支店情報<br>従業員E：通勤距離</div><article class="card"><h3>従業員設定状況</h3><div id="c-summary" class="list" style="margin-top:10px"></div></article><article class="card"><h3>よく使う設定</h3><div class="grid2" style="margin-top:10px"><button class="list-item edit" data-kind="tax" data-title="事業主設定"><strong>事業主設定</strong><small>納期特例など</small></button><button class="list-item edit" data-kind="allowance" data-title="手当マスター"><strong>手当</strong><small>追加・無効化</small></button><button class="list-item edit" data-kind="employee" data-title="従業員設定"><strong>従業員</strong><small>通勤・手当</small></button><button class="list-item edit" data-kind="bank" data-title="振込口座"><strong>振込口座</strong><small>銀行情報</small></button></div></article></div></div>
+</section>
+<p class="privacy">このページはUI検討用の静的モックです。従業員A〜Fはすべて架空のダミーです。実在する従業員の氏名、給与額、口座番号、マイナンバー等は含みません。入力内容は保存・送信されません。</p>
 </main>
-
-<dialog id="editor-dialog">
-  <form id="editor-form" class="modal" method="dialog">
-    <header class="modal-head"><div><span class="mock-badge">編集モック</span><h3 id="dialog-title">設定を編集</h3></div><button type="button" class="close" id="dialog-close" aria-label="閉じる">×</button></header>
-    <div class="modal-body" id="dialog-fields"></div>
-    <footer class="modal-actions"><button type="button" class="btn" id="dialog-cancel">キャンセル</button><button type="submit" class="btn primary">保存</button></footer>
-  </form>
-</dialog>
+<dialog id="editor-dialog"><form id="editor-form" class="modal" method="dialog"><header class="modal-head"><div><span class="badge">編集モック</span><h3 id="dialog-title">設定を編集</h3></div><button type="button" class="close" id="dialog-close" aria-label="閉じる">×</button></header><div class="modal-body" id="dialog-fields"></div><footer class="modal-actions"><button type="button" class="btn" id="dialog-cancel">キャンセル</button><button type="submit" class="btn primary">保存</button></footer></form></dialog>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
-
 <script>
-(() => {
-  'use strict';
-  const root = document;
-  const q = (s) => root.querySelector(s);
-  const qa = (s) => Array.from(root.querySelectorAll(s));
-  const toast = q('#toast');
-  let toastTimer = null;
-
-  function showToast(message) {
-    toast.textContent = message;
-    toast.classList.add('show');
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => toast.classList.remove('show'), 1700);
-  }
-
-  qa('.pattern-tab').forEach((button) => {
-    button.addEventListener('click', () => {
-      const key = button.dataset.pattern;
-      qa('.pattern-tab').forEach((b) => b.setAttribute('aria-selected', b === button ? 'true' : 'false'));
-      qa('.panel').forEach((p) => p.classList.add('hidden'));
-      q('#panel-' + key).classList.remove('hidden');
-    });
-  });
-
-  qa('.subtab').forEach((button) => {
-    button.addEventListener('click', () => {
-      qa('.subtab').forEach((b) => b.setAttribute('aria-selected', b === button ? 'true' : 'false'));
-      qa('.a-pane').forEach((p) => p.classList.add('hidden'));
-      q('#a-' + button.dataset.aPane).classList.remove('hidden');
-    });
-  });
-
-  function toggleTax(button, note) {
-    const next = button.getAttribute('aria-pressed') !== 'true';
-    button.setAttribute('aria-pressed', next ? 'true' : 'false');
-    button.textContent = next ? 'ON' : 'OFF';
-    button.style.background = next ? 'var(--good-bg)' : '#f2f4f7';
-    button.style.color = next ? 'var(--good)' : 'var(--muted)';
-    if (note) note.textContent = '現在 ' + (next ? 'ON' : 'OFF');
-    showToast('納期の特例を ' + (next ? 'ON' : 'OFF') + ' に変更しました（モック）');
-  }
-  q('#a-tax').addEventListener('click', () => toggleTax(q('#a-tax'), q('#a-tax-note')));
-  q('#b-tax').addEventListener('click', () => toggleTax(q('#b-tax')));
-
-  const people = {
-    a: {name:'従業員A', sub:'E001 / 在籍中', state:'設定完了', distance:'6.0 km', bankState:'設定済み', bank:'サンプル信用金庫 / サンプル支店 / 口座番号は非表示', chips:['通勤手当']},
-    b: {name:'従業員B', sub:'E002 / 在籍中', state:'1件要確認', distance:'12.0 km', bankState:'要確認', bank:'サンプル信用金庫 / 支店未設定 / 口座番号は非表示', chips:['通勤手当','役職手当']}
-  };
-  qa('.person').forEach((button) => {
-    button.addEventListener('click', () => {
-      const p = people[button.dataset.person];
-      qa('.person').forEach((b) => b.setAttribute('aria-selected', b === button ? 'true' : 'false'));
-      q('#b-name').textContent = p.name;
-      q('#b-sub').textContent = p.sub;
-      q('#b-state').textContent = p.state;
-      q('#b-state').className = 'status' + (p.state.includes('要確認') ? ' warn' : '');
-      q('#b-distance').textContent = p.distance;
-      q('#b-bank-state').textContent = p.bankState;
-      q('#b-bank').textContent = p.bank;
-      q('#b-chips').innerHTML = p.chips.map((x) => '<span class="chip">' + x + '</span>').join('');
-    });
-  });
-
-  const dialog = q('#editor-dialog');
-  const dialogTitle = q('#dialog-title');
-  const dialogFields = q('#dialog-fields');
-  const templates = {
-    allowance: '<label class="field">手当名<input value="通勤手当"></label><label class="field">種類<select><option>距離連動</option><option>固定額</option></select></label><label class="field">状態<select><option>有効</option><option>無効</option></select></label>',
-    employee: '<label class="field">通勤距離（km）<input type="number" min="0" step="0.1" value="6.0"></label><fieldset style="border:0;padding:0;margin:0"><legend style="font-size:13px;font-weight:650">適用手当</legend><div class="checks"><label class="check"><input type="checkbox" checked> 通勤手当</label><label class="check"><input type="checkbox"> 役職手当</label></div></fieldset><label class="field">適用開始日<input type="date" value="2026-09-01"></label>',
-    bank: '<div class="notice" style="margin-bottom:12px">公開用モックのため、実際の口座番号や名義は扱いません。</div><label class="field">金融機関<input value="サンプル信用金庫"></label><label class="field">支店<input value="サンプル支店"></label><label class="field">口座種別<select><option>普通</option><option>当座</option></select></label><label class="field">口座番号<input value="非表示" disabled></label>',
-    tax: '<div class="notice" style="margin-bottom:12px">事業主ごとの設定です。</div><label class="field">源泉所得税の納期の特例<select><option>ON</option><option>OFF</option></select></label>'
-  };
-
-  function openEditor(button) {
-    dialogTitle.textContent = button.dataset.title || '設定を編集';
-    dialogFields.innerHTML = templates[button.dataset.kind] || templates.employee;
-    if (typeof dialog.showModal === 'function') dialog.showModal();
-    else dialog.setAttribute('open', '');
-  }
-  qa('.edit').forEach((button) => button.addEventListener('click', () => openEditor(button)));
-  function closeDialog() { if (dialog.open && typeof dialog.close === 'function') dialog.close(); else dialog.removeAttribute('open'); }
-  q('#dialog-close').addEventListener('click', closeDialog);
-  q('#dialog-cancel').addEventListener('click', closeDialog);
-  q('#editor-form').addEventListener('submit', (event) => { event.preventDefault(); closeDialog(); showToast('保存しました（モック）'); });
-  qa('[data-toast]').forEach((button) => button.addEventListener('click', () => showToast(button.dataset.toast)));
+(()=>{'use strict';
+const q=s=>document.querySelector(s),qa=s=>Array.from(document.querySelectorAll(s));const toast=q('#toast');let timer;function showToast(m){toast.textContent=m;toast.classList.add('show');clearTimeout(timer);timer=setTimeout(()=>toast.classList.remove('show'),1700)}
+const peopleData={
+a:{name:'従業員A',id:'E001',state:'設定完了',distance:'6.0 km',bankState:'設定済み',bank:'サンプル信用金庫 / 中央支店 / 口座番号は非表示',chips:['通勤手当'],history:['2026-09-01 通勤距離を設定','2026-09-01 振込口座を登録']},
+b:{name:'従業員B',id:'E002',state:'1件要確認',distance:'12.0 km',bankState:'要確認',bank:'サンプル信用金庫 / 支店未設定 / 口座番号は非表示',chips:['通勤手当','役職手当'],history:['2026-09-01 役職手当を開始','振込口座の支店情報が未設定']},
+c:{name:'従業員C',id:'E003',state:'設定完了',distance:'2.4 km',bankState:'設定済み',bank:'サンプル銀行 / 北支店 / 口座番号は非表示',chips:['通勤手当'],history:['2026-09-01 通勤距離を設定','2026-09-01 振込口座を登録']},
+d:{name:'従業員D',id:'E004',state:'設定完了',distance:'18.7 km',bankState:'設定済み',bank:'サンプル信用金庫 / 南支店 / 口座番号は非表示',chips:['通勤手当','役職手当'],history:['2026-09-01 通勤距離を設定','2026-09-10 役職手当を開始']},
+e:{name:'従業員E',id:'E005',state:'1件要確認',distance:'未設定',bankState:'設定済み',bank:'サンプル銀行 / 西支店 / 口座番号は非表示',chips:[],history:['2026-09-01 振込口座を登録','通勤距離が未設定']},
+f:{name:'従業員F',id:'E006',state:'設定完了',distance:'8.5 km',bankState:'設定済み',bank:'サンプル信用金庫 / 東支店 / 口座番号は非表示',chips:['通勤手当'],history:['2026-09-01 通勤距離を設定','2026-09-01 通勤手当を開始']}}
+function personKeys(){return Object.keys(peopleData)}
+function renderLists(){q('#people').innerHTML=personKeys().map((k,i)=>{const p=peopleData[k];return `<button class="person" data-person="${k}" aria-selected="${i===0?'true':'false'}"><strong>${p.name}</strong><small>${p.id} / ${p.state}</small></button>`}).join('');q('#a-employee-list').innerHTML=personKeys().map(k=>{const p=peopleData[k];return `<button class="list-item edit" data-kind="employee" data-title="${p.name}の給与設定"><span class="topline"><strong>${p.name}</strong><span class="status${p.state.includes('要確認')?' warn':''}">${p.state}</span></span><small>${p.id} / 通勤 ${p.distance} / ${p.chips.length?p.chips.join('・'):'手当なし'}</small></button>`}).join('');q('#a-bank-list').innerHTML=personKeys().map(k=>{const p=peopleData[k];return `<button class="list-item edit" data-kind="bank" data-title="${p.name}の振込口座"><span class="topline"><strong>${p.name}</strong><span class="status${p.bankState==='要確認'?' warn':''}">${p.bankState}</span></span><small>${p.bank}</small></button>`}).join('');q('#c-summary').innerHTML=personKeys().map(k=>{const p=peopleData[k];return `<div class="row"><span>${p.name} <span class="muted">${p.id}</span></span><span class="status${p.state.includes('要確認')?' warn':''}">${p.state}</span></div>`}).join('')}
+function selectPerson(k){const p=peopleData[k];qa('.person').forEach(b=>b.setAttribute('aria-selected',b.dataset.person===k?'true':'false'));q('#b-name').textContent=p.name;q('#b-sub').textContent=p.id+' / 在籍中';q('#b-state').textContent=p.state;q('#b-state').className='status'+(p.state.includes('要確認')?' warn':'');q('#b-distance').textContent=p.distance;q('#b-bank-state').textContent=p.bankState;q('#b-bank').textContent=p.bank;q('#b-chips').innerHTML=p.chips.length?p.chips.map(x=>`<span class="chip">${x}</span>`).join(''):'<span class="muted">手当なし</span>';q('#b-history').innerHTML=p.history.map(x=>`<div class="row"><span>${x}</span></div>`).join('')}
+qa('.tab').forEach(b=>b.addEventListener('click',()=>{qa('.tab').forEach(x=>x.setAttribute('aria-selected',x===b?'true':'false'));qa('.panel').forEach(p=>p.classList.add('hidden'));q('#panel-'+b.dataset.pattern).classList.remove('hidden')}));qa('.subtab').forEach(b=>b.addEventListener('click',()=>{qa('.subtab').forEach(x=>x.setAttribute('aria-selected',x===b?'true':'false'));qa('.a-pane').forEach(p=>p.classList.add('hidden'));q('#a-'+b.dataset.pane).classList.remove('hidden')}));function toggleTax(btn,note){const next=btn.getAttribute('aria-pressed')!=='true';btn.setAttribute('aria-pressed',next?'true':'false');btn.textContent=next?'ON':'OFF';btn.style.background=next?'var(--goodbg)':'#f2f4f7';btn.style.color=next?'var(--good)':'var(--muted)';if(note)note.textContent='現在 '+(next?'ON':'OFF');showToast('納期の特例を '+(next?'ON':'OFF')+' に変更しました（モック）')}q('#a-tax').addEventListener('click',()=>toggleTax(q('#a-tax'),q('#a-tax-note')));q('#b-tax').addEventListener('click',()=>toggleTax(q('#b-tax')));
+const dialog=q('#editor-dialog'),title=q('#dialog-title'),fields=q('#dialog-fields');const templates={allowance:'<label class="field">手当名<input value="通勤手当"></label><label class="field">種類<select><option>距離連動</option><option>固定額</option></select></label><label class="field">状態<select><option>有効</option><option>無効</option></select></label>',employee:'<label class="field">通勤距離（km）<input type="number" min="0" step="0.1" value="6.0"></label><fieldset style="border:0;padding:0;margin:0"><legend style="font-size:13px;font-weight:650">適用手当</legend><div class="checks"><label class="check"><input type="checkbox" checked> 通勤手当</label><label class="check"><input type="checkbox"> 役職手当</label></div></fieldset><label class="field">適用開始日<input type="date" value="2026-09-01"></label>',bank:'<div class="notice" style="margin-bottom:12px">公開用モックのため、実際の口座番号や名義は扱いません。</div><label class="field">金融機関<input value="サンプル信用金庫"></label><label class="field">支店<input value="サンプル支店"></label><label class="field">口座種別<select><option>普通</option><option>当座</option></select></label><label class="field">口座番号<input value="非表示" disabled></label>',tax:'<div class="notice" style="margin-bottom:12px">事業主ごとの設定です。</div><label class="field">源泉所得税の納期の特例<select><option>ON</option><option>OFF</option></select></label>'};function bindDynamic(){qa('.person').forEach(b=>b.onclick=()=>selectPerson(b.dataset.person));qa('.edit').forEach(b=>b.onclick=()=>{title.textContent=b.dataset.title||'設定を編集';fields.innerHTML=templates[b.dataset.kind]||templates.employee;if(typeof dialog.showModal==='function')dialog.showModal();else dialog.setAttribute('open','')})}function closeDialog(){if(dialog.open&&typeof dialog.close==='function')dialog.close();else dialog.removeAttribute('open')}q('#dialog-close').addEventListener('click',closeDialog);q('#dialog-cancel').addEventListener('click',closeDialog);q('#editor-form').addEventListener('submit',e=>{e.preventDefault();closeDialog();showToast('保存しました（モック）')});qa('[data-toast]').forEach(b=>b.addEventListener('click',()=>showToast(b.dataset.toast)));renderLists();bindDynamic();selectPerson('a');
 })();
 </script>
 </body>
